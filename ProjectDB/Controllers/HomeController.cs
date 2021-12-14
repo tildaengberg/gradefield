@@ -39,6 +39,7 @@ namespace ProjectDB.Controllers
         [HttpPost]
         public IActionResult Login(Person person)
         {
+            
             Methods method = new Methods();
 
             if (method.VerifyAccount(out string errormsg, person))
@@ -46,6 +47,9 @@ namespace ProjectDB.Controllers
                 return RedirectToAction("Overview");
             }
 
+            ViewBag.errormsg = errormsg;
+            ViewBag.user = person.Username;
+            ViewBag.pass = person.Password;
 
             return View();
         }

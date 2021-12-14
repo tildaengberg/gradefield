@@ -24,62 +24,57 @@ namespace ProjectDB.Models
 
         public bool VerifyAccount(out string errormsg, Person person)
         {
+
+
+            SqlConnection dbConnection = new SqlConnection(GetConnection().GetSection("ConnectionStrings").GetSection("DefaultConnection").Value);
+
+            // sqlstring och lägg till en user i databasen
+            String sqlstring = "SELECT Pe_Losenord FROM Tbl_Person WHERE Pe_Anvandarnamn = '@user';";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+
+            SqlDataReader reader = null;
+
+            string password = "";
+
+            errormsg = "";
+
             try
-
             {
-                if (person != null)
+                dbConnection.Open();
 
+                reader = dbCommand.ExecuteReader();
+
+                while (reader.Read())
                 {
-                    string connectionstring = GetConnection().GetSection("ConnectionStrings").GetSection("DefaultConnection").Value;
-
-                    SqlConnection con = new SqlConnection(connectionstring);
-                    SqlDataReader reader = null;
-                    SqlCommand cmd = new SqlCommand("SELECT Pe_Losenord FROM Tbl_Person WHERE Pe_Anvandarnamn = '@user';", con);
-                    cmd.CommandType = CommandType.Text;
+                  
+                    password = reader["Pe_Losenord"].ToString();
                     
-                    cmd.Parameters.AddWithValue("@user", person.Username);
+                }
+                reader.Close();
 
-                    con.Open();
 
-                    cmd.ExecuteNonQuery();
 
-                    reader = cmd.ExecuteReader();
+                if (password == person.Password)
+                {
 
-                    string password = "";
-                    errormsg = "";
-
-                    while (reader.Read())
-                    {
-                        password = reader["Pe_Losenord"].ToString();
-                    }
-
-                    reader.Close();
-
-                    con.Close();
-
-                    if (password == person.Password)
-                    {
-                        
-                        return true;
-                    } else {
-                        return false;
-                    }
-
+                    return true;
+                }
+                else
+                {
+                    errormsg = password;
+                    return false;
                 }
 
             }
-
-            catch (Exception ex)
-
+            catch (Exception e)
             {
-
-                throw ex;
-
+                errormsg = e.Message;
+                return false;
             }
-
-            errormsg = "";
-            return false;
-
+            finally
+            {
+                dbConnection.Close();
+            }
         }
     }
 }

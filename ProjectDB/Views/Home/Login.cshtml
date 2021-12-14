@@ -5,10 +5,6 @@
 
 @* <h1>Login</h1> *@
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
-
 <div class="container-fluid">
     <div style="margin-top:0px;" class="row-fluid">
         <div class="offset4 span4 well">
@@ -35,3 +31,13 @@
         </div>
     </div>
 </div>
+
+@ViewBag.errormsg
+@ViewBag.user
+@ViewBag.pass
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
