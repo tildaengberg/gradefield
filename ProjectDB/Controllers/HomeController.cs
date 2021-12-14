@@ -23,8 +23,19 @@ namespace ProjectDB.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        [HttpGet]
+        public IActionResult Login()
         {
+
+            Person person = new Person();
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Login(Person person)
+        {
+
+
             return View();
         }
 

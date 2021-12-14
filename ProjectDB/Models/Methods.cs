@@ -27,9 +27,6 @@ namespace ProjectDB.Models
             try
 
             {
-
-
-
                 if (person != null)
 
                 {
@@ -40,9 +37,9 @@ namespace ProjectDB.Models
 
                     cmd.CommandType = CommandType.Text;
 
-                    cmd.Parameters.AddWithValue("@FileNames", bild.Title);
+                    //cmd.Parameters.AddWithValue("@FileNames", bild.Title);
 
-                    cmd.Parameters.AddWithValue("@Filepic", bytes);
+                    //cmd.Parameters.AddWithValue("@Filepic", bytes);
 
                     con.Open();
 
@@ -50,7 +47,7 @@ namespace ProjectDB.Models
 
                     con.Close();
                     errormsg = "";
-                    return bytes;
+                    return true;
 
 
 
@@ -67,7 +64,7 @@ namespace ProjectDB.Models
             }
 
             errormsg = "";
-            return null;
+            return false;
 
         }
     }
