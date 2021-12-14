@@ -23,6 +23,11 @@ namespace ProjectDB.Controllers
             return View();
         }
 
+        public IActionResult Overview()
+        {
+            return View();
+        }
+
         [HttpGet]
         public IActionResult Login()
         {
@@ -34,6 +39,12 @@ namespace ProjectDB.Controllers
         [HttpPost]
         public IActionResult Login(Person person)
         {
+            Methods method = new Methods();
+
+            if (method.VerifyAccount(out string errormsg, person))
+            {
+                return RedirectToAction("Overview");
+            }
 
 
             return View();

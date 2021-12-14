@@ -22,7 +22,7 @@ namespace ProjectDB.Models
 
         }
 
-        public bool AddImage(out string errormsg, Person person)
+        public bool VerifyAccount(out string errormsg, Person person)
         {
             try
 
@@ -30,26 +30,40 @@ namespace ProjectDB.Models
                 if (person != null)
 
                 {
-                    string connectionstring = GetConnection().GetSection("ConnectionStrings").GetSection("MyConnectionString").Value;
+                    string connectionstring = GetConnection().GetSection("ConnectionStrings").GetSection("DefaultConnection").Value;
 
                     SqlConnection con = new SqlConnection(connectionstring);
-                    SqlCommand cmd = new SqlCommand("Insert into Tbl_Image(Im_Title,Im_Data) values(@FileNames,@Filepic)", con);
-
+                    SqlDataReader reader = null;
+                    SqlCommand cmd = new SqlCommand("SELECT Pe_Losenord FROM Tbl_Person WHERE Pe_Anvandarnamn = '@user';", con);
                     cmd.CommandType = CommandType.Text;
-
-                    //cmd.Parameters.AddWithValue("@FileNames", bild.Title);
-
-                    //cmd.Parameters.AddWithValue("@Filepic", bytes);
+                    
+                    cmd.Parameters.AddWithValue("@user", person.Username);
 
                     con.Open();
 
                     cmd.ExecuteNonQuery();
 
-                    con.Close();
+                    reader = cmd.ExecuteReader();
+
+                    string password = "";
                     errormsg = "";
-                    return true;
 
+                    while (reader.Read())
+                    {
+                        password = reader["Pe_Losenord"].ToString();
+                    }
 
+                    reader.Close();
+
+                    con.Close();
+
+                    if (password == person.Password)
+                    {
+                        
+                        return true;
+                    } else {
+                        return false;
+                    }
 
                 }
 
