@@ -22,6 +22,15 @@ namespace ProjectDB
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(60);
+                options.Cookie.HttpOnly = true;
+
+            });
+
             services.AddControllersWithViews();
         }
 
@@ -36,10 +45,11 @@ namespace ProjectDB
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            app.UseSession();
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
