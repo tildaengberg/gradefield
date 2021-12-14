@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
@@ -29,8 +30,10 @@ namespace ProjectDB.Models
             SqlConnection dbConnection = new SqlConnection(GetConnection().GetSection("ConnectionStrings").GetSection("DefaultConnection").Value);
 
             // sqlstring och lägg till en user i databasen
-            String sqlstring = "SELECT Pe_Losenord FROM Tbl_Person WHERE Pe_Anvandarnamn = '@user';";
+            String sqlstring = "SELECT Pe_Losenord FROM Tbl_Person WHERE Pe_Anvandarnamn = @user";
             SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+
+            dbCommand.Parameters.Add("user", System.Data.SqlDbType.NVarChar, 30).Value = person.Username;
 
             SqlDataReader reader = null;
 
@@ -46,7 +49,6 @@ namespace ProjectDB.Models
 
                 while (reader.Read())
                 {
-                  
                     password = reader["Pe_Losenord"].ToString();
                     
                 }
@@ -54,7 +56,7 @@ namespace ProjectDB.Models
 
 
 
-                if (password == person.Password)
+                if (person.Password == password)
                 {
 
                     return true;

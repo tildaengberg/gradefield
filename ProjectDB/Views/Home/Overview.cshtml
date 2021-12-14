@@ -1,7 +1,9 @@
-@page
-@{
-    ViewData["Title"] = "Overview";
-}
+@model Person
+<partial name="navbar" />
+
+@{ ViewData["Title"] = "Overview"; }
+
+@ViewBag.user
 
 <h1>Overview</h1>
 

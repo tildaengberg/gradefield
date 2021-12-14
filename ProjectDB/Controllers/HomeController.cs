@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ProjectDB.Models;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
 
 namespace ProjectDB.Controllers
 {
@@ -25,6 +27,8 @@ namespace ProjectDB.Controllers
 
         public IActionResult Overview()
         {
+            string s = HttpContext.Session.GetString("session");
+            ViewBag.user = s;
             return View();
         }
 
@@ -44,12 +48,14 @@ namespace ProjectDB.Controllers
 
             if (method.VerifyAccount(out string errormsg, person))
             {
+                string s = person.Username;
+                HttpContext.Session.SetString("session", s);
                 return RedirectToAction("Overview");
             }
 
             ViewBag.errormsg = errormsg;
-            ViewBag.user = person.Username;
-            ViewBag.pass = person.Password;
+
+            
 
             return View();
         }
