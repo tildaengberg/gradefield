@@ -60,6 +60,32 @@ namespace ProjectDB.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult CreateUser()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult CreateUser(Person person)
+        {
+
+            Methods method = new Methods();
+
+            if (method.CreateAccount(out string errormsg, person))
+            {
+                string s = person.Username;
+                HttpContext.Session.SetString("session", s);
+                return RedirectToAction("Overview");
+            }
+
+            ViewBag.errormsg = errormsg;
+
+
+
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

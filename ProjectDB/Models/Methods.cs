@@ -78,5 +78,55 @@ namespace ProjectDB.Models
                 dbConnection.Close();
             }
         }
+
+
+
+
+
+        public bool CreateAccount(out string errormsg, Person person)
+        {
+
+
+            SqlConnection dbConnection = new SqlConnection(GetConnection().GetSection("ConnectionStrings").GetSection("DefaultConnection").Value);
+
+            // sqlstring och lägg till en user i databasen
+            String sqlstring = "INSERT INTO [Tbl_Person]([Pe_Anvandarnamn], [Pe_Losenord], [Pe_Utbildning], [Pe_Examensdatum]) VALUES (@user, @password, @education, @datetime)";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+
+            dbCommand.Parameters.Add("user", System.Data.SqlDbType.NVarChar, 30).Value = person.Username;
+            dbCommand.Parameters.Add("password", System.Data.SqlDbType.NVarChar, 30).Value = person.Password;
+            dbCommand.Parameters.Add("education", System.Data.SqlDbType.NVarChar, 50).Value = person.Education;
+            dbCommand.Parameters.Add("datetime", System.Data.SqlDbType.DateTime).Value = person.ExamDate;
+
+            errormsg = "";
+            bool success = false;
+
+            try
+            {
+                dbConnection.Open();
+                int i = dbCommand.ExecuteNonQuery();
+                if(i == 1) {
+                    success = true;
+                    return success;
+                }
+
+                else
+                {
+                    errormsg = "Det går inte att lägga till en användare";
+                    return false;
+                }
+               
+
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return false;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+        }
     }
 }
