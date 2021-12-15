@@ -1,0 +1,18 @@
+@model Course
+
+<partial name="navbar" />
+
+@{ ViewData["Title"] = "EditCourse"; }
+
+<h1>EditCourse</h1>
+
+@Html.DisplayFor(c => c.Name)
+@Html.DisplayFor(c => c.Betyg)
+@Html.DisplayFor(c => c.Status)
+@Html.DisplayFor(c => c.Institution)
+@Html.DisplayFor(c => c.HP)
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

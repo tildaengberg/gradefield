@@ -290,7 +290,7 @@ namespace ProjectDB.Models
             SqlConnection dbConnection = new SqlConnection(GetConnection().GetSection("ConnectionStrings").GetSection("DefaultConnection").Value);
 
             // sqlstring och lägg till en user i databasen
-            String sqlstring = "SELECT Ku_Namn, Ku_HP, St_Kursstatus FROM Tbl_KursPerson INNER JOIN Tbl_Kurs ON Tbl_KursPerson.KP_Kurs = Tbl_Kurs.Ku_ID INNER JOIN Tbl_Person ON Tbl_KursPerson.KP_Person = Tbl_Person.Pe_ID INNER JOIN Tbl_Status ON Tbl_KursPerson.KP_Status = Tbl_Status.St_ID WHERE Pe_Anvandarnamn = @user ; ";
+            String sqlstring = "SELECT Ku_ID, Ku_Namn, Ku_HP, St_Kursstatus FROM Tbl_KursPerson INNER JOIN Tbl_Kurs ON Tbl_KursPerson.KP_Kurs = Tbl_Kurs.Ku_ID INNER JOIN Tbl_Person ON Tbl_KursPerson.KP_Person = Tbl_Person.Pe_ID INNER JOIN Tbl_Status ON Tbl_KursPerson.KP_Status = Tbl_Status.St_ID WHERE Pe_Anvandarnamn = @user ; ";
             SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
 
             dbCommand.Parameters.Add("user", System.Data.SqlDbType.NVarChar, 30).Value = username;
@@ -310,6 +310,7 @@ namespace ProjectDB.Models
                 while (reader.Read())
                 {
                     Course course = new Course();
+                    course.ID = Convert.ToInt16(reader["Ku_ID"]);
                     course.Name = reader["Ku_Namn"].ToString();
                     course.HP = Convert.ToDouble(reader["Ku_HP"]);
                     course.Status = reader["St_Kursstatus"].ToString();
@@ -319,6 +320,63 @@ namespace ProjectDB.Models
                 }
                 reader.Close();
                 return courses;
+
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return null;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+
+
+
+        }
+
+
+        public Course GetCourse(out string errormsg, string username, int selected)
+        {
+
+
+            SqlConnection dbConnection = new SqlConnection(GetConnection().GetSection("ConnectionStrings").GetSection("DefaultConnection").Value);
+
+            // sqlstring och lägg till en user i databasen
+            String sqlstring = "SELECT Ku_ID, Ku_Namn, Ku_HP, In_Institutionsnamn, St_Kursstatus, Be_Kursbetyg FROM Tbl_KursPerson INNER JOIN Tbl_Kurs ON Tbl_KursPerson.KP_Kurs = Tbl_Kurs.Ku_ID INNER JOIN Tbl_Person ON Tbl_KursPerson.KP_Person = Tbl_Person.Pe_ID INNER JOIN Tbl_Status ON Tbl_KursPerson.KP_Status = Tbl_Status.St_ID INNER JOIN Tbl_Betyg ON Tbl_KursPerson.KP_Betyg = Tbl_Betyg.Be_ID INNER JOIN Tbl_Institution ON Tbl_Kurs.Ku_Institution = Tbl_Institution.In_ID WHERE Pe_Anvandarnamn = @user AND Ku_ID = @sel ";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+
+            SqlDataReader reader = null;
+
+            dbCommand.Parameters.Add("user", System.Data.SqlDbType.NVarChar, 30).Value = username;
+            dbCommand.Parameters.Add("sel", System.Data.SqlDbType.Int).Value = selected;
+
+
+            Course course = new Course();
+
+            errormsg = "";
+
+            try
+            {
+                dbConnection.Open();
+
+                reader = dbCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    
+                    course.ID = Convert.ToInt16(reader["Ku_ID"]);
+                    course.Name = reader["Ku_Namn"].ToString();
+                    course.HP = Convert.ToDouble(reader["Ku_HP"]);
+                    course.Institution = reader["In_Institutionsnamn"].ToString();
+                    course.Status = reader["St_Kursstatus"].ToString();
+                    course.Betyg = reader["Be_Kursbetyg"].ToString();
+
+                }
+                reader.Close();
+
+                return course;
 
             }
             catch (Exception e)

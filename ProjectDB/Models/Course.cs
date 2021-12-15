@@ -7,6 +7,7 @@ namespace ProjectDB.Models
         {
         }
 
+        public int ID { get; set; }
         public string Name { get; set; }
         public double HP { get; set; }
         public string Institution { get; set; }

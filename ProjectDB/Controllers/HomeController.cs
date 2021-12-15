@@ -8,6 +8,9 @@ using Microsoft.Extensions.Logging;
 using ProjectDB.Models;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
+using System.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace ProjectDB.Controllers
 {
@@ -119,11 +122,34 @@ namespace ProjectDB.Controllers
         }
 
 
+        public IActionResult EditCourse(string edit)
+        {
+            int selected = Convert.ToInt16(edit);
+            string s = HttpContext.Session.GetString("session");
+            ViewBag.user = s;
+            Methods method = new Methods();
+
+            Course course = method.GetCourse(out string errormsg, s, selected);
+
+            
+            //ViewBag.model = course.Name;
+
+            //ViewBag.selected = edit;
+
+            return View(course);
+        }
+
+
+
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+      
     }
 }

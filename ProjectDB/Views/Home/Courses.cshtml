@@ -2,6 +2,7 @@
 @model Person
 
 @{ ViewData["Title"] = "Courses"; }
+<partial name="navbar" />
 
 <br />
 <br />
@@ -21,6 +22,10 @@
     <td>@courses.Name</td>
     <td>@courses.HP</td>
     <td>@courses.Status</td>
+    <td>
+        <a href="EditCourse?edit=@courses.ID
+           ">Edit</a>
+    </td>
 </tr>}
 
 
