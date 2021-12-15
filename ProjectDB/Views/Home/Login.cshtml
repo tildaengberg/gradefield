@@ -32,6 +32,7 @@
 </div>
 
 @ViewBag.errormsg
-@ViewBag.user
-@ViewBag.pass
 
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

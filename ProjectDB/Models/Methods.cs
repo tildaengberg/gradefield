@@ -63,7 +63,7 @@ namespace ProjectDB.Models
                 }
                 else
                 {
-                    errormsg = password;
+                    errormsg = "Fel lösenord";
                     return false;
                 }
 

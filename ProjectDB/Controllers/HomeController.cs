@@ -50,21 +50,30 @@ namespace ProjectDB.Controllers
         [HttpPost]
         public IActionResult Login(Person person)
         {
-            
-            Methods method = new Methods();
-
-            if (method.VerifyAccount(out string errormsg, person))
+            if (ModelState.IsValid)
             {
-                string s = person.Username;
-                HttpContext.Session.SetString("session", s);
-                return RedirectToAction("Overview");
+                Methods method = new Methods();
+
+                if (method.VerifyAccount(out string errormsg, person))
+                {
+                    string s = person.Username;
+                    HttpContext.Session.SetString("session", s);
+                    return RedirectToAction("Overview");
+                }
+
+                ViewBag.errormsg = errormsg;
+
+
+
+                return View();
             }
 
-            ViewBag.errormsg = errormsg;
-
+            else
+            {
+                return View();
+            }
             
 
-            return View();
         }
 
         [HttpGet]
