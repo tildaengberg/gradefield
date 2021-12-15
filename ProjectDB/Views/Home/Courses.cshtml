@@ -1,9 +1,31 @@
-@page
-@{
-    ViewData["Title"] = "Courses";
-}
 
-<h1>Courses</h1>
+@model Person
+
+@{ ViewData["Title"] = "Courses"; }
+
+<br />
+<br />
+
+<h4>Dina kurser:</h4>
+
+<table class="table">
+    <tr>
+        <th>Kurs</th>
+        <th>HP</th>
+        <th>Status</th>
+    </tr>
+
+    @foreach (ProjectDB.Models.Course courses in Model.Courses)
+    {
+<tr>
+    <td>@courses.Name</td>
+    <td>@courses.HP</td>
+    <td>@courses.Status</td>
+</tr>}
+
+
+
+</table>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

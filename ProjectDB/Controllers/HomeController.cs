@@ -104,8 +104,22 @@ namespace ProjectDB.Controllers
             return View();
         }
 
+        public IActionResult Courses()
+        {
+            string s = HttpContext.Session.GetString("session");
+            ViewBag.user = s;
+            Methods method = new Methods();
+            Person person = new Person
+            {
+                Courses = method.GetCourses(out string errormsg2, s)
 
-        
+            };
+
+            return View(person);
+        }
+
+
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
