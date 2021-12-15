@@ -227,5 +227,60 @@ namespace ProjectDB.Models
                 dbConnection.Close();
             }
         }
+
+
+
+        public List<Grade> Grades(out string errormsg, string username)
+        {
+
+            SqlConnection dbConnection = new SqlConnection(GetConnection().GetSection("ConnectionStrings").GetSection("DefaultConnection").Value);
+
+            // sqlstring och lägg till en user i databasen
+            String sqlstring = "SELECT Be_Kursbetyg, COUNT(Tbl_KursPerson.KP_Betyg) AS Frequency FROM Tbl_KursPerson INNER JOIN Tbl_Betyg ON Tbl_KursPerson.KP_Betyg = Tbl_Betyg.Be_ID INNER JOIN Tbl_Person ON Tbl_KursPerson.KP_Person = Tbl_Person.Pe_ID WHERE Tbl_Person.Pe_Anvandarnamn = @user GROUP BY Tbl_Betyg.Be_Kursbetyg ORDER BY COUNT(Tbl_KursPerson.KP_Betyg) DESC ";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+
+            SqlDataReader reader = null;
+
+            dbCommand.Parameters.Add("user", System.Data.SqlDbType.NVarChar, 30).Value = username;
+
+            List<Grade> stats = new List<Grade>();
+            errormsg = "";
+
+
+
+            try
+            {
+                dbConnection.Open();
+
+                reader = dbCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+
+                    Grade grade = new Grade();
+
+                    if (reader["Be_Kursbetyg"].ToString() != "NAN")
+                    {
+                        grade.GradeType = reader["Be_Kursbetyg"].ToString();
+                        grade.Frequency = Convert.ToInt16(reader["Frequency"]);
+                        stats.Add(grade);
+                    }
+
+                }
+                reader.Close();
+                return stats;
+
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return null;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+
+        }
     }
 }

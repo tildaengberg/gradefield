@@ -33,7 +33,9 @@ namespace ProjectDB.Controllers
             Person person = new Person
             {
                 Failed = method.GetFailed(out string errormsg, s),
-                Ongoing = method.GetOngoing(out string errormsg2, s)
+                Ongoing = method.GetOngoing(out string errormsg2, s),
+                Grades = method.Grades(out string errormsg3,s)
+
             };
 
             return View(person);

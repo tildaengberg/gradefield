@@ -1,14 +1,13 @@
 ﻿@model Person
-<partial name="navbar" />
 
 @{ ViewData["Title"] = "Skapa användare"; }
-
-<h1>Skapa användare</h1>
 
 <div class="container-fluid">
     <div style="margin-top:0px;" class="row-fluid">
         <div class="offset4 span4 well">
             <form asp-action="CreateUser" method="post" style="margin: 10% auto; width: 400px;">
+                <h4>Skapa en ny användare</h4>
+                <br />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="Username" class="control-label, span12"></label>
@@ -37,6 +36,7 @@
                     <input type="submit" value="Skapa användare" class="btn btn-dark" />
                 </div>
 
+                <a asp-controller="Home" asp-action="Login">Logga in</a>
             </form>
 
         </div>

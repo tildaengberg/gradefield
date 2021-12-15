@@ -31,5 +31,7 @@ namespace ProjectDB.Models
 
         // Pågående kurser
         public List<Course> Ongoing = new List<Course>();
+
+        public List<Grade> Grades = new List<Grade>();
     }
 }

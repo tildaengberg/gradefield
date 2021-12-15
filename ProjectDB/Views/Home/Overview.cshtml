@@ -8,23 +8,6 @@
 
 <br />
 <br />
-<h4>Dina oavklarade kurser:</h4>
-
-<table class="table">
-    <tr>
-        <th>Kurs</th>
-        <th>HP</th>
-    </tr>
-
-    @foreach (ProjectDB.Models.Course personlista in Model.Failed)
-    {
-        <tr>
-            <td>@personlista.Name</td>
-            <td>@personlista.HP</td>
-        </tr>
-    }
-
-</table>
 
 <h4>Dina pågående kurser:</h4>
 
@@ -36,13 +19,102 @@
 
     @foreach (ProjectDB.Models.Course personlista in Model.Ongoing)
     {
-        <tr>
-            <td>@personlista.Name</td>
-            <td>@personlista.HP</td>
-        </tr>
-    }
+<tr>
+    <td>@personlista.Name</td>
+    <td>@personlista.HP</td>
+</tr>
+}
+
+
 
 </table>
+
+<br />
+<br />
+
+<h4>Dina oavklarade kurser:</h4>
+
+<table class="table">
+    <tr>
+        <th>Kurs</th>
+        <th>HP</th>
+    </tr>
+
+    @foreach (ProjectDB.Models.Course personlista in Model.Failed)
+    {
+<tr>
+    <td>@personlista.Name</td>
+    <td>@personlista.HP</td>
+</tr>}
+
+</table>
+<br />
+<br />
+
+<h4>Erhållna betyg:</h4>
+
+<br />
+<div style="display: flex; justify-content: center; align-items: center;">
+    <div style="position: relative; height: 40vh; width: 40vw;">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <canvas id="chart"></canvas>
+        <script>
+        var namn = [];
+        var stats = [];
+
+                @foreach (ProjectDB.Models.Grade grade in Model.Grades)
+                {
+                    @:namn.push("@Html.Raw(@grade.GradeType)");
+                    @:stats.push("@grade.Frequency");
+                }
+
+
+            var data = {
+                labels: namn,
+                datasets: [{
+
+                    data: stats,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            };
+
+                var options = {
+                    maintainAspectRatio: false
+                };
+
+
+            new Chart('chart', {
+                type: 'pie',
+                options: options,
+                data: data
+            });
+
+
+
+        </script>
+
+
+
+    </div>
+</div>
+
+
 
 
 
