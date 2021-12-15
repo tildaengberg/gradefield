@@ -1,5 +1,4 @@
 @model Person
-<partial name="navbar" />
 
 @{ ViewData["Title"] = "Login"; }
 
@@ -36,8 +35,3 @@
 @ViewBag.user
 @ViewBag.pass
 
-
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

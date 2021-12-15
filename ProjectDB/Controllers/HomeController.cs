@@ -29,7 +29,11 @@ namespace ProjectDB.Controllers
         {
             string s = HttpContext.Session.GetString("session");
             ViewBag.user = s;
-            return View();
+            Person person = new Person();
+            Methods method = new Methods();
+            person.Failed = method.GetFailed(out string errormsg, s);
+
+            return View(person);
         }
 
         [HttpGet]
@@ -86,6 +90,8 @@ namespace ProjectDB.Controllers
             return View();
         }
 
+
+        
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

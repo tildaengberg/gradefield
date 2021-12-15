@@ -3,10 +3,32 @@
 
 @{ ViewData["Title"] = "Overview"; }
 
-@ViewBag.user
+<br />
+<h2>Välkommen @ViewBag.user!</h2>
 
-<h1>Overview</h1>
+<br />
+<br />
+<h4>Dina oavklarade kurser:</h4>
+
+<table class="table">
+<tr>
+    <th>Kurs</th>
+    <th>HP</th>
+</tr>
+
+@foreach (ProjectDB.Models.Course personlista in Model.Failed)
+{
+        <tr>
+            <td>@personlista.Name</td>
+            <td>@personlista.HP</td>
+        </tr>
+}
+
+</table>
+
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+
+    }

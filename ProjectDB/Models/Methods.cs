@@ -128,5 +128,56 @@ namespace ProjectDB.Models
                 dbConnection.Close();
             }
         }
+
+
+
+
+        public List<Course> GetFailed(out string errormsg, string username)
+        {
+
+
+            SqlConnection dbConnection = new SqlConnection(GetConnection().GetSection("ConnectionStrings").GetSection("DefaultConnection").Value);
+
+            // sqlstring och lägg till en user i databasen
+            String sqlstring = "SELECT Ku_Namn, Ku_HP FROM Tbl_KursPerson INNER JOIN Tbl_Kurs ON Tbl_KursPerson.KP_Kurs = Tbl_Kurs.Ku_ID INNER JOIN Tbl_Person ON Tbl_KursPerson.KP_Person = Tbl_Person.Pe_ID INNER JOIN Tbl_Status ON Tbl_KursPerson.KP_Status = Tbl_Status.St_ID WHERE Pe_Anvandarnamn = @user AND St_Kursstatus = 'Oavslutad'; ";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+
+            dbCommand.Parameters.Add("user", System.Data.SqlDbType.NVarChar, 30).Value = username;
+
+            SqlDataReader reader = null;
+
+            List<Course> courses = new List<Course>();
+
+            errormsg = "";
+
+            try
+            {
+                dbConnection.Open();
+
+                reader = dbCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Course course = new Course();
+                    course.Name = reader["Ku_Namn"].ToString();
+                    course.HP = Convert.ToDouble(reader["Ku_HP"]);
+
+                    courses.Add(course);
+
+                }
+                reader.Close();
+                return courses;
+
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return null;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+        }
     }
 }
