@@ -11,18 +11,36 @@
 <h4>Dina oavklarade kurser:</h4>
 
 <table class="table">
-<tr>
-    <th>Kurs</th>
-    <th>HP</th>
-</tr>
+    <tr>
+        <th>Kurs</th>
+        <th>HP</th>
+    </tr>
 
-@foreach (ProjectDB.Models.Course personlista in Model.Failed)
-{
+    @foreach (ProjectDB.Models.Course personlista in Model.Failed)
+    {
         <tr>
             <td>@personlista.Name</td>
             <td>@personlista.HP</td>
         </tr>
-}
+    }
+
+</table>
+
+<h4>Dina pågående kurser:</h4>
+
+<table class="table">
+    <tr>
+        <th>Kurs</th>
+        <th>HP</th>
+    </tr>
+
+    @foreach (ProjectDB.Models.Course personlista in Model.Ongoing)
+    {
+        <tr>
+            <td>@personlista.Name</td>
+            <td>@personlista.HP</td>
+        </tr>
+    }
 
 </table>
 
@@ -31,4 +49,4 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-    }
+}

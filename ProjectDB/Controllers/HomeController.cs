@@ -29,9 +29,12 @@ namespace ProjectDB.Controllers
         {
             string s = HttpContext.Session.GetString("session");
             ViewBag.user = s;
-            Person person = new Person();
             Methods method = new Methods();
-            person.Failed = method.GetFailed(out string errormsg, s);
+            Person person = new Person
+            {
+                Failed = method.GetFailed(out string errormsg, s),
+                Ongoing = method.GetOngoing(out string errormsg2, s)
+            };
 
             return View(person);
         }
