@@ -40,7 +40,7 @@
 
 
                 <div class="form-group">
-                    <select class="form-control" id="Institution" name="Institution">
+                    <select class="form-control" id="status" name="status">
                         @foreach (ProjectDB.Models.Status statuses in Model.AllStatuses)
                         {
         @if (statuses.Id != i)
@@ -70,7 +70,7 @@ else
 
 
                 <div class="form-group">
-                    <select class="form-control" id="Institution" name="Institution">
+                    <select class="form-control" id="betyg" name="betyg">
                         @foreach (ProjectDB.Models.Grade grades in Model.AllGrades)
                         {
         @if (grades.Id != j)

@@ -138,6 +138,8 @@ namespace ProjectDB.Controllers
             Status status = method.GetStatus(out string errormsg3, course.Status);
             Grade grade = method.GetGrade(out string errormsg5, course.Betyg);
 
+            HttpContext.Session.SetString("course", edit);
+
             ViewData["status"] = status.Id;
             ViewData["betyg"] = grade.Id;
 
@@ -146,15 +148,18 @@ namespace ProjectDB.Controllers
 
 
         [HttpPost]
-        public IActionResult EditCourse(int select, Course course)
+        public IActionResult EditCourse(int select, string status, string betyg)
         {
             
             string s = HttpContext.Session.GetString("session");
+            string s2 = HttpContext.Session.GetString("course");
+
             ViewBag.user = s;
 
             Methods method = new Methods();
+            Course course = method.GetCourse(out string errormsg2, s, Convert.ToInt16(s2));
 
-            if (method.UpdateCourse(out string errormsg, course, s))
+            if (method.UpdateCourse(out string errormsg, course, s, status, betyg))
             {
                 return RedirectToAction("Courses");
             }
