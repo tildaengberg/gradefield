@@ -147,7 +147,7 @@ namespace ProjectDB.Controllers
 
 
         [HttpPost]
-        public IActionResult EditCourse(int select)
+        public IActionResult EditCourse(int select, Course course)
         {
             
             string s = HttpContext.Session.GetString("session");
@@ -155,9 +155,12 @@ namespace ProjectDB.Controllers
 
             Methods method = new Methods();
 
-           
+            if (method.UpdateCourse(out string errormsg, course, s))
+            {
+                return RedirectToAction("Courses");
+            }
 
-            return View();
+            return View(course);
         }
 
 

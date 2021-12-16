@@ -580,5 +580,57 @@ namespace ProjectDB.Models
         }
 
 
+
+
+
+
+        public bool UpdateCourse(out string errormsg, Course course, string user)
+        {
+
+
+            SqlConnection dbConnection = new SqlConnection(GetConnection().GetSection("ConnectionStrings").GetSection("DefaultConnection").Value);
+
+            // sqlstring och lägg till en user i databasen
+            String sqlstring = "UPDATE Tbl_KursPerson SET KP_Status = @status , KP_Betyg = @betyg FROM Tbl_KursPerson INNER JOIN Tbl_Person ON Tbl_KursPerson.KP_Person = Tbl_Person.Pe_ID WHERE KP_Kurs = @kurs AND Tbl_Person.Pe_Anvandarnamn = @user ";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+
+            dbCommand.Parameters.Add("status", System.Data.SqlDbType.Int).Value = GetStatus(out string errormsg2, course.Status);
+            dbCommand.Parameters.Add("betyg", System.Data.SqlDbType.Int).Value = GetGrade(out string errormsg3, course.Betyg);
+            dbCommand.Parameters.Add("kurs", System.Data.SqlDbType.Int).Value = course.ID;
+            dbCommand.Parameters.Add("user", System.Data.SqlDbType.NVarChar, 50).Value = user;
+
+            errormsg = "";
+            bool success = false;
+
+            try
+            {
+                dbConnection.Open();
+                int i = dbCommand.ExecuteNonQuery();
+                if (i == 1)
+                {
+                    success = true;
+                    return success;
+                }
+
+                else
+                {
+                    errormsg = "Det går inte att uppdatera en kurs";
+                    return false;
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return false;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+        }
+
+
     }
 }
