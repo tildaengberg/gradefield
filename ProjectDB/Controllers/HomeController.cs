@@ -170,6 +170,39 @@ namespace ProjectDB.Controllers
             return View(course);
         }
 
+        [HttpGet]
+        public IActionResult CreateCourse()
+        {
+            Methods method = new Methods();
+            Course course = new Course();
+
+            course.AllInstitutions = method.GetInstitutions(out string errormsg);
+
+            string s = HttpContext.Session.GetString("session");
+            ViewBag.user = s;
+
+            return View(course);
+        }
+
+        [HttpPost]
+        public IActionResult CreateCourse(Course course, string inst)
+        {
+            
+            string s = HttpContext.Session.GetString("session");
+            ViewBag.user = s;
+
+            int instID = Convert.ToInt16(inst);
+            Methods method = new Methods();
+
+            course.AllInstitutions = method.GetInstitutions(out string errormsg);
+
+            int i = Convert.ToInt16(inst);
+
+            ViewData["inst"] = i;
+
+            return View(course);
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

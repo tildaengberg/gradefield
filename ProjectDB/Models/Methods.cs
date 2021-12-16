@@ -632,5 +632,139 @@ namespace ProjectDB.Models
         }
 
 
+
+
+
+        // INSÄTTNING PERSON
+        public int CreateCourse(out string errormsg, Course course, int instID)
+        {
+            SqlConnection dbConnection = new SqlConnection(GetConnection().GetSection("ConnectionStrings").GetSection("DefaultConnection").Value);
+
+            String sqlstring = "INSERT INTO Tbl_Kurs (Ku_HP, Ku_Namn, Ku_Institution) VALUES(@HP, @Namn, @Institution) SELECT SCOPE_IDENTITY() AS ID";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+
+            SqlDataReader reader = null;
+
+            dbCommand.Parameters.Add("HP", System.Data.SqlDbType.Float).Value = course.HP;
+            dbCommand.Parameters.Add("Namn", System.Data.SqlDbType.NVarChar, 50).Value = course.Name;
+            dbCommand.Parameters.Add("Institution", System.Data.SqlDbType.Int).Value = instID;
+
+            errormsg = "";
+            int courseID;
+
+            try
+            {
+                dbConnection.Open();
+
+                reader = dbCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+
+                    courseID = Convert.ToInt16(reader["ID"]);
+
+                }
+                reader.Close();
+                return courseID;
+
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return 0;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+        }
+
+
+
+
+
+        public int AddCourse(out string errormsg, Course course, int instID)
+        {
+            SqlConnection dbConnection = new SqlConnection(GetConnection().GetSection("ConnectionStrings").GetSection("DefaultConnection").Value);
+
+            String sqlstring = "INSERT INTO Tbl_KursPerson (KP_, Ku_Namn, Ku_Institution) VALUES(@HP, @Namn, @Institution)";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+
+            dbCommand.Parameters.Add("HP", System.Data.SqlDbType.Float).Value = course.HP;
+            dbCommand.Parameters.Add("Namn", System.Data.SqlDbType.NVarChar, 50).Value = course.Name;
+            dbCommand.Parameters.Add("Institution", System.Data.SqlDbType.Int).Value = instID;
+
+            try
+            {
+                dbConnection.Open();
+                int i = 0;
+                i = dbCommand.ExecuteNonQuery();
+                if (i == 1) { errormsg = ""; }
+                else { errormsg = "Det skapas inte en kurs i databasen"; }
+                return (i);
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return 0;
+            }
+
+            finally
+            {
+                dbConnection.Close();
+            }
+        }
+
+
+
+
+
+
+
+        public List<Institution> GetInstitutions(out string errormsg)
+        {
+
+
+            SqlConnection dbConnection = new SqlConnection(GetConnection().GetSection("ConnectionStrings").GetSection("DefaultConnection").Value);
+
+            String sqlstring = "SELECT * FROM Tbl_Institution";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+
+            SqlDataReader reader = null;
+
+            List<Institution> institutions = new List<Institution>();
+            errormsg = "";
+
+            try
+            {
+                dbConnection.Open();
+
+                reader = dbCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Institution institution = new Institution();
+                    institution.name = reader["In_Institutionsnamn"].ToString();
+                    institution.ID = Convert.ToInt16(reader["In_ID"]);
+
+                    institutions.Add(institution);
+
+                }
+                reader.Close();
+                return institutions;
+
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return null;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+        }
+
+
     }
 }
