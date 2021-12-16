@@ -195,10 +195,13 @@ namespace ProjectDB.Controllers
             Methods method = new Methods();
 
             course.AllInstitutions = method.GetInstitutions(out string errormsg);
-
             int i = Convert.ToInt16(inst);
-
             ViewData["inst"] = i;
+
+            if(method.AddCourse(out string errormsg2, course, instID, s))
+            {
+                return RedirectToAction("Courses");
+            }
 
             return View(course);
         }

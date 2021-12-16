@@ -650,17 +650,19 @@ namespace ProjectDB.Models
             dbCommand.Parameters.Add("Institution", System.Data.SqlDbType.Int).Value = instID;
 
             errormsg = "";
-            int courseID;
+          
 
             try
             {
+                int courseID = 0;
+
                 dbConnection.Open();
 
                 reader = dbCommand.ExecuteReader();
 
                 while (reader.Read())
                 {
-
+                
                     courseID = Convert.ToInt16(reader["ID"]);
 
                 }
@@ -683,32 +685,45 @@ namespace ProjectDB.Models
 
 
 
-        public int AddCourse(out string errormsg, Course course, int instID)
+        public bool AddCourse(out string errormsg, Course course, int instID, string user)
         {
+
+            int courseID = CreateCourse(out string errormsg2, course, instID);
+
             SqlConnection dbConnection = new SqlConnection(GetConnection().GetSection("ConnectionStrings").GetSection("DefaultConnection").Value);
 
-            String sqlstring = "INSERT INTO Tbl_KursPerson (KP_, Ku_Namn, Ku_Institution) VALUES(@HP, @Namn, @Institution)";
+            String sqlstring = "INSERT INTO Tbl_KursPerson VALUES((SELECT Pe_ID FROM Tbl_Person WHERE Pe_Anvandarnamn = @user ), @courseID , (SELECT St_ID FROM Tbl_Status WHERE St_Kursstatus = 'Kommande'), (SELECT Be_ID FROM Tbl_Betyg WHERE Be_Kursbetyg = 'NAN'))";
             SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
 
-            dbCommand.Parameters.Add("HP", System.Data.SqlDbType.Float).Value = course.HP;
-            dbCommand.Parameters.Add("Namn", System.Data.SqlDbType.NVarChar, 50).Value = course.Name;
-            dbCommand.Parameters.Add("Institution", System.Data.SqlDbType.Int).Value = instID;
+            dbCommand.Parameters.Add("user", System.Data.SqlDbType.NVarChar, 50).Value = user;
+            dbCommand.Parameters.Add("courseID", System.Data.SqlDbType.Int).Value = courseID;
+
+            errormsg = "";
+            bool success = false;
 
             try
             {
                 dbConnection.Open();
-                int i = 0;
-                i = dbCommand.ExecuteNonQuery();
-                if (i == 1) { errormsg = ""; }
-                else { errormsg = "Det skapas inte en kurs i databasen"; }
-                return (i);
+                int i = dbCommand.ExecuteNonQuery();
+                if (i == 1)
+                {
+                    success = true;
+                    return success;
+                }
+
+                else
+                {
+                    errormsg = "Det går inte att uppdatera en kurs";
+                    return false;
+                }
+
+
             }
             catch (Exception e)
             {
                 errormsg = e.Message;
-                return 0;
+                return false;
             }
-
             finally
             {
                 dbConnection.Close();
