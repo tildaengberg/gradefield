@@ -781,5 +781,56 @@ namespace ProjectDB.Models
         }
 
 
+
+
+
+        public bool DeleteCourse(out string errormsg, string user, int course)
+        {
+
+
+            SqlConnection dbConnection = new SqlConnection(GetConnection().GetSection("ConnectionStrings").GetSection("DefaultConnection").Value);
+
+            // sqlstring och lägg till en user i databasen
+            String sqlstring = "DELETE FROM Tbl_KursPerson WHERE KP_Kurs = @course AND (KP_Person = (SELECT Pe_ID FROM Tbl_Person WHERE Pe_Anvandarnamn = @user ));";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+
+            
+            dbCommand.Parameters.Add("course", System.Data.SqlDbType.Int).Value = course;
+            dbCommand.Parameters.Add("user", System.Data.SqlDbType.NVarChar, 50).Value = user;
+
+            errormsg = "";
+            bool success = false;
+
+            try
+            {
+                dbConnection.Open();
+                int i = dbCommand.ExecuteNonQuery();
+                if (i == 1)
+                {
+                    success = true;
+                    return success;
+                }
+
+                else
+                {
+                    errormsg = "Det går inte att ta bort kurs";
+                    return false;
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return false;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+        }
+
+
+
     }
 }

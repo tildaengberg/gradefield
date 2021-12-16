@@ -28,64 +28,72 @@
             <br />
             <br />
             <h6><b>Status</b></h6>
-            <form asp-action="EditCourse" method="post" style="margin: 10% auto; width: 400px;">
+            <form asp-action="EditCourse" method="post" style="margin: 0% auto; width: 400px;">
 
                 @{ if (Model.Status != "Avklarad")
                     {
-        
 
-                        <div class="form-group">
-                            <select class="form-control" id="status" name="status">
 
-                                @foreach (ProjectDB.Models.Status statuses in Model.AllStatuses)
-                                {
-                @if (statuses.Id != i)
+        <div class="form-group">
+            <select class="form-control" id="status" name="status">
+
+                @foreach (ProjectDB.Models.Status statuses in Model.AllStatuses)
                 {
-<option value=" @statuses.Id ">@statuses.StatusType</option>
- }
-else
+@if (statuses.Id != i)
 {
-<option value="@statuses.Id" Selected>@statuses.StatusType</option>
-}}
-                            </select>
-                        </div> }
+<option value=" @statuses.Id ">@statuses.StatusType</option> }
                     else
                     {
-        @Html.DisplayFor(c => c.Status) } }
-                <br />
+<option value="@statuses.Id" Selected>@statuses.StatusType</option>}}
+            </select>
+        </div> }
+    else
+    {
+@Html.DisplayFor(c => c.Status) } }
                 <br />
                 <h6><b>Betyg</b></h6>
 
                 @{ if (Model.Betyg == "NAN" || Model.Betyg == "U")
                     {
 
-        <br />
 
-                        <div class="form-group">
-                            <select class="form-control" id="betyg" name="betyg">
-                                @foreach (ProjectDB.Models.Grade grades in Model.AllGrades)
-                                {
 
-                @if (grades.Id != j)
+        <div class="form-group">
+            <select class="form-control" id="betyg" name="betyg">
+                @foreach (ProjectDB.Models.Grade grades in Model.AllGrades)
                 {
 
-<option value=" @grades.Id ">@grades.GradeType</option>
- }
-else
+@if (grades.Id != j)
 {
-<option value="@grades.Id" Selected>@grades.GradeType</option>
-}}
-                            </select>
-                        </div> }
+
+<option value=" @grades.Id ">@grades.GradeType</option> }
+                    else
+                    {
+<option value="@grades.Id" Selected>@grades.GradeType</option>}}
+            </select>
+        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Uppdatera" class="btn btn-dark" />
+                        </div>}
 
                     else
                     {
-        @Html.DisplayFor(c => c.Betyg) } }
 
-                <div class="form-group">
-                    <input type="submit" value="Uppdatera" class="btn btn-dark" />
-                </div>
+        @Html.DisplayFor(c => c.Betyg) }
+
+
+
+
+    if (Model.Status != "Avklarad")
+    {
+<div class="form-group">
+    <input name="del" type="submit" value="Ta bort" class="btn btn-danger" />
+</div> } }
+
+
             </form>
+
+
 
             <br />
             <br />
@@ -95,6 +103,7 @@ else
 
 
 @ViewBag.errormsg
+@ViewBag.del
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

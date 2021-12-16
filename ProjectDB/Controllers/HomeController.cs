@@ -147,8 +147,8 @@ namespace ProjectDB.Controllers
         }
 
 
-        [HttpPost]
-        public IActionResult EditCourse(int select, string status, string betyg)
+        [HttpPost] //Vafan är select ?
+        public IActionResult EditCourse(int select, string status, string betyg, string del)
         {
             
             string s = HttpContext.Session.GetString("session");
@@ -158,14 +158,21 @@ namespace ProjectDB.Controllers
 
             Methods method = new Methods();
             Course course = method.GetCourse(out string errormsg2, s, Convert.ToInt16(s2));
+            if ((string.IsNullOrEmpty(del))){
 
-            if (method.UpdateCourse(out string errormsg, course, s, status, betyg))
+                if (method.UpdateCourse(out string errormsg, course, s, status, betyg))
+                {
+                    return RedirectToAction("Courses");
+                }
+            } else
             {
-                return RedirectToAction("Courses");
+                if (method.DeleteCourse(out string errormsg3, s, Convert.ToInt16(s2)))
+                {
+                    return RedirectToAction("Courses");
+                }
             }
 
-
-            ViewBag.errormsg = errormsg;
+            ViewBag.del = del;
 
             return View(course);
         }
@@ -201,8 +208,9 @@ namespace ProjectDB.Controllers
             if(method.AddCourse(out string errormsg2, course, instID, s))
             {
                 return RedirectToAction("Courses");
-            }
+            } 
 
+           
             return View(course);
         }
 

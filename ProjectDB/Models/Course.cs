@@ -7,6 +7,7 @@ namespace ProjectDB.Models
     {
         public Course()
         {
+           
         }
 
         public int ID { get; set; }
@@ -19,5 +20,6 @@ namespace ProjectDB.Models
         public List<Grade> AllGrades = new List<Grade>();
         public List<Status> AllStatuses = new List<Status>();
         public List<Institution> AllInstitutions = new List<Institution>();
+
     }
 }
