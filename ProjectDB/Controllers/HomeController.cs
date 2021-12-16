@@ -141,7 +141,6 @@ namespace ProjectDB.Controllers
             ViewData["status"] = status.Id;
             ViewData["betyg"] = grade.Id;
 
-
             return View(course);
         }
 
@@ -159,6 +158,9 @@ namespace ProjectDB.Controllers
             {
                 return RedirectToAction("Courses");
             }
+
+
+            ViewBag.errormsg = errormsg;
 
             return View(course);
         }
