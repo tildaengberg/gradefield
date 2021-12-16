@@ -122,6 +122,7 @@ namespace ProjectDB.Controllers
         }
 
 
+        [HttpGet]
         public IActionResult EditCourse(string edit)
         {
             int selected = Convert.ToInt16(edit);
@@ -130,13 +131,30 @@ namespace ProjectDB.Controllers
             Methods method = new Methods();
 
             Course course = method.GetCourse(out string errormsg, s, selected);
+            course.AllStatuses = method.GetStatuses(out string errormsg2);
 
-            
-            //ViewBag.model = course.Name;
 
-            //ViewBag.selected = edit;
+            Status status = method.GetStatus(out string errormsg3, course.Status);
 
+            ViewData["this"] = status.Id;
+
+       
             return View(course);
+        }
+
+
+        [HttpPost]
+        public IActionResult EditCourse(int select)
+        {
+            
+            string s = HttpContext.Session.GetString("session");
+            ViewBag.user = s;
+
+            Methods method = new Methods();
+
+           
+
+            return View();
         }
 
 

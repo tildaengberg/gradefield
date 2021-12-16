@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+
 namespace ProjectDB.Models
 {
     public class Course
@@ -13,5 +15,8 @@ namespace ProjectDB.Models
         public string Institution { get; set; }
         public string Status { get; set; }
         public string Betyg { get; set; }
+
+        public List<Grade> AllGrades = new List<Grade>();
+        public List<Status> AllStatuses = new List<Status>();
     }
 }

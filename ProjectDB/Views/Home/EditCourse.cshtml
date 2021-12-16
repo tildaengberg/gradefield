@@ -1,16 +1,67 @@
 @model Course
 
+@{ int i = 0;
+    if (ViewData["this"] != null) { i = (int)ViewData["this"]; } }
+
 <partial name="navbar" />
 
 @{ ViewData["Title"] = "EditCourse"; }
 
-<h1>EditCourse</h1>
+<br />
+<br />
 
-@Html.DisplayFor(c => c.Name)
-@Html.DisplayFor(c => c.Betyg)
-@Html.DisplayFor(c => c.Status)
-@Html.DisplayFor(c => c.Institution)
+<h4>@Html.DisplayFor(c => c.Name)</h4>
+<br />
+<br />
+
+<h6><b>Högskolepoäng</b></h6>
 @Html.DisplayFor(c => c.HP)
+<br />
+<br />
+
+<h6><b>Institution</b></h6>
+@Html.DisplayFor(c => c.Institution)
+<br />
+<br />
+
+
+<h6><b>Status</b></h6>
+@Html.DisplayFor(c => c.Status)
+
+
+@{ if (Model.Status != "Avklarad")
+    {
+<br />
+
+
+
+
+                <form asp-action="EditCourse" method="post">
+                    <div class="form-group">
+                        <select class="form-control" id="Institution" name="Institution">
+                            @foreach (ProjectDB.Models.Status statuses in Model.AllStatuses)
+                            {
+            @if (statuses.Id != i)
+            {
+<option value=" @statuses.Id ">@statuses.StatusType</option> }
+                    else
+                    {
+<option value="@statuses.Id" Selected>@statuses.StatusType</option>}}
+                        </select>
+                    </div>
+                   
+                </form>
+
+} }
+
+<br />
+<br />
+
+<h6><b>Betyg</b></h6>
+@Html.DisplayFor(c => c.Betyg)
+<br />
+<br />
+
 
 
 @section Scripts {

@@ -389,5 +389,103 @@ namespace ProjectDB.Models
                 dbConnection.Close();
             }
         }
+
+
+
+
+
+        public List<Status> GetStatuses(out string errormsg)
+        {
+
+
+            SqlConnection dbConnection = new SqlConnection(GetConnection().GetSection("ConnectionStrings").GetSection("DefaultConnection").Value);
+
+            // sqlstring och lägg till en user i databasen
+            String sqlstring = "SELECT * FROM Tbl_Status";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+
+            SqlDataReader reader = null;
+
+            List<Status> statuses = new List<Status>();
+
+            errormsg = "";
+
+            try
+            {
+                dbConnection.Open();
+
+                reader = dbCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Status status = new Status();
+                    status.StatusType = reader["St_Kursstatus"].ToString();
+                    status.Id = Convert.ToInt16(reader["St_ID"]);
+
+                    statuses.Add(status);
+
+                }
+                reader.Close();
+                return statuses;
+
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return null;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+        }
+
+
+
+
+        public Status GetStatus(out string errormsg, string name)
+        {
+
+
+            SqlConnection dbConnection = new SqlConnection(GetConnection().GetSection("ConnectionStrings").GetSection("DefaultConnection").Value);
+
+            // sqlstring och lägg till en user i databasen
+            String sqlstring = "SELECT * FROM Tbl_Status WHERE St_Kursstatus = @name ";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+
+            SqlDataReader reader = null;
+            dbCommand.Parameters.Add("name", System.Data.SqlDbType.NVarChar, 30).Value = name;
+
+            Status status = new Status();
+
+            errormsg = "";
+
+            try
+            {
+                dbConnection.Open();
+
+                reader = dbCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+               
+                    status.StatusType = reader["St_Kursstatus"].ToString();
+                    status.Id = Convert.ToInt16(reader["St_ID"]);
+
+                }
+                reader.Close();
+                return status;
+
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return null;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+        }
     }
 }
