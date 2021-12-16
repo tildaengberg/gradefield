@@ -1,7 +1,10 @@
 @model Course
 
 @{ int i = 0;
-    if (ViewData["this"] != null) { i = (int)ViewData["this"]; } }
+    if (ViewData["status"] != null) { i = (int)ViewData["status"]; } }
+
+@{ int j = 0;
+    if (ViewData["betyg"] != null) { j = (int)ViewData["betyg"]; } }
 
 <partial name="navbar" />
 
@@ -26,39 +29,70 @@
 
 
 <h6><b>Status</b></h6>
-@Html.DisplayFor(c => c.Status)
+<form asp-action="EditCourse" method="post">
 
-
-@{ if (Model.Status != "Avklarad")
-    {
+    @{ if (Model.Status != "Avklarad")
+        {
 <br />
 
 
 
 
-                <form asp-action="EditCourse" method="post">
-                    <div class="form-group">
-                        <select class="form-control" id="Institution" name="Institution">
-                            @foreach (ProjectDB.Models.Status statuses in Model.AllStatuses)
-                            {
-            @if (statuses.Id != i)
+
+                <div class="form-group">
+                    <select class="form-control" id="Institution" name="Institution">
+                        @foreach (ProjectDB.Models.Status statuses in Model.AllStatuses)
+                        {
+        @if (statuses.Id != i)
+        {
+<option value=" @statuses.Id ">@statuses.StatusType</option>
+ }
+else
+{
+<option value="@statuses.Id" Selected>@statuses.StatusType</option>
+}}
+                    </select>
+                </div> }
+            else
             {
-<option value=" @statuses.Id ">@statuses.StatusType</option> }
-                    else
-                    {
-<option value="@statuses.Id" Selected>@statuses.StatusType</option>}}
-                        </select>
-                    </div>
-                   
-                </form>
+@Html.DisplayFor(c => c.Status) } }
 
-} }
+    <br />
+    <br />
 
-<br />
+    <h6><b>Betyg</b></h6>
+
+    @{ if (Model.Betyg == "NAN" || Model.Betyg == "U")
+        {
 <br />
 
-<h6><b>Betyg</b></h6>
-@Html.DisplayFor(c => c.Betyg)
+
+
+
+                <div class="form-group">
+                    <select class="form-control" id="Institution" name="Institution">
+                        @foreach (ProjectDB.Models.Grade grades in Model.AllGrades)
+                        {
+        @if (grades.Id != j)
+        {
+<option value=" @grades.Id ">@grades.GradeType</option>
+ }
+else
+{
+<option value="@grades.Id" Selected>@grades.GradeType</option>
+}}
+                    </select>
+                </div> }
+            else
+            {
+@Html.DisplayFor(c => c.Betyg) } }
+
+    <div class="form-group">
+        <input type="submit" value="Uppdatera" class="btn btn-dark" />
+    </div>
+</form>
+
+
 <br />
 <br />
 

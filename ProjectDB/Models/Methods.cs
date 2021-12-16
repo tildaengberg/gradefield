@@ -487,5 +487,98 @@ namespace ProjectDB.Models
                 dbConnection.Close();
             }
         }
+
+        public List<Grade> GetGrades(out string errormsg)
+        {
+
+
+            SqlConnection dbConnection = new SqlConnection(GetConnection().GetSection("ConnectionStrings").GetSection("DefaultConnection").Value);
+
+            // sqlstring och lägg till en user i databasen
+            String sqlstring = "SELECT * FROM Tbl_Betyg";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+
+            SqlDataReader reader = null;
+
+            List<Grade> grades = new List<Grade>();
+
+            errormsg = "";
+
+            try
+            {
+                dbConnection.Open();
+
+                reader = dbCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Grade grade = new Grade();
+                    grade.GradeType = reader["Be_Kursbetyg"].ToString();
+                    grade.Id = Convert.ToInt16(reader["Be_ID"]);
+
+                    grades.Add(grade);
+
+                }
+                reader.Close();
+                return grades;
+
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return null;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+        }
+
+        public Grade GetGrade(out string errormsg, string name)
+        {
+
+
+            SqlConnection dbConnection = new SqlConnection(GetConnection().GetSection("ConnectionStrings").GetSection("DefaultConnection").Value);
+
+            // sqlstring och lägg till en user i databasen
+            String sqlstring = "SELECT * FROM Tbl_Betyg WHERE Be_Kursbetyg = @name ";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+
+            SqlDataReader reader = null;
+            dbCommand.Parameters.Add("name", System.Data.SqlDbType.NVarChar, 30).Value = name;
+
+            Grade grade = new Grade();
+
+            errormsg = "";
+
+            try
+            {
+                dbConnection.Open();
+
+                reader = dbCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+
+                    grade.GradeType = reader["Be_Kursbetyg"].ToString();
+                    grade.Id = Convert.ToInt16(reader["Be_ID"]);
+
+                }
+                reader.Close();
+                return grade;
+
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return null;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+        }
+
+
     }
 }

@@ -7,6 +7,7 @@ namespace ProjectDB.Models
         {
         }
 
+        public int Id { get; set; }
         public string GradeType { get; set; }
         public int Frequency { get; set; }
     }

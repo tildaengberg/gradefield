@@ -132,13 +132,16 @@ namespace ProjectDB.Controllers
 
             Course course = method.GetCourse(out string errormsg, s, selected);
             course.AllStatuses = method.GetStatuses(out string errormsg2);
+            course.AllGrades = method.GetGrades(out string errormsg4);
 
 
             Status status = method.GetStatus(out string errormsg3, course.Status);
+            Grade grade = method.GetGrade(out string errormsg5, course.Betyg);
 
-            ViewData["this"] = status.Id;
+            ViewData["status"] = status.Id;
+            ViewData["betyg"] = grade.Id;
 
-       
+
             return View(course);
         }
 
@@ -156,10 +159,6 @@ namespace ProjectDB.Controllers
 
             return View();
         }
-
-
-
-
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
