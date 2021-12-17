@@ -215,6 +215,27 @@ namespace ProjectDB.Controllers
         }
 
 
+
+        // Fortsätt här, getexam returnerar null :(
+        [HttpGet]
+        public IActionResult Graduation()
+        {
+            string s = HttpContext.Session.GetString("session");
+            ViewBag.user = s;
+
+            Methods method = new Methods();
+            Person person = method.GetExam(out string errmormsg, s);
+
+            //ViewBag.date = person.ExamDate;
+            ViewBag.error = errmormsg;
+
+            return View(person);
+        }
+
+
+
+
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

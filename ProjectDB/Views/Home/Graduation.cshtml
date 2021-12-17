@@ -1,9 +1,18 @@
-@page
-@{
-    ViewData["Title"] = "Graduation";
-}
+@model Person
 
-<h1>Graduation</h1>
+@{ ViewData["Title"] = "Graduation"; }
+
+<partial name="navbar" />
+
+<br />
+<h2>Min examen</h2>
+
+@ViewBag.date
+@ViewBag.error
+
+<br />
+<br />
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

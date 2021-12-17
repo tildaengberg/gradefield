@@ -17,8 +17,11 @@ namespace ProjectDB.Models
         [MinLength(5, ErrorMessage = "Lösenord måste bestå av minst 5 tecken")]
         [Required(ErrorMessage = "Du måste fylla i lösenord")]
         public string Password { get; set; }
+
+        [DataType(DataType.Date)]
         [Display(Name = "Examensdatum")]
         public DateTime ExamDate { get; set; }
+
         [Display(Name = "Utbildning")]
         public string Education { get; set; }
 

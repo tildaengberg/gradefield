@@ -96,7 +96,7 @@ namespace ProjectDB.Models
             dbCommand.Parameters.Add("user", System.Data.SqlDbType.NVarChar, 30).Value = person.Username;
             dbCommand.Parameters.Add("password", System.Data.SqlDbType.NVarChar, 30).Value = person.Password;
             dbCommand.Parameters.Add("education", System.Data.SqlDbType.NVarChar, 50).Value = person.Education;
-            dbCommand.Parameters.Add("datetime", System.Data.SqlDbType.DateTime).Value = person.ExamDate;
+            dbCommand.Parameters.Add("datetime", System.Data.SqlDbType.DateTime).Value = person.ExamDate.ToShortDateString();
 
             errormsg = "";
             bool success = false;
@@ -831,6 +831,52 @@ namespace ProjectDB.Models
         }
 
 
+
+        // Denna returnerar null, in need to fix
+        public Person GetExam(out string errormsg, string name)
+        {
+
+
+            SqlConnection dbConnection = new SqlConnection(GetConnection().GetSection("ConnectionStrings").GetSection("DefaultConnection").Value);
+
+            // sqlstring och lägg till en user i databasen
+            String sqlstring = "SELECT Pe_Examensdatum FROM Tbl_Person WHERE Pe_Anvandarnamn = @name ";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+
+            SqlDataReader reader = null;
+            dbCommand.Parameters.Add("name", System.Data.SqlDbType.NVarChar, 30).Value = name;
+
+            Person person = new Person();
+
+            errormsg = "";
+
+            try
+            {
+                dbConnection.Open();
+
+                reader = dbCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+
+                    person.ExamDate = Convert.ToDateTime(reader["Pe_Examensdatum"]);
+                    person.Username = reader["Pe_Anvandarnamn"].ToString();
+
+                }
+                reader.Close();
+                return person;
+
+            }
+            catch (Exception)
+            {
+                errormsg = "Det går inte att hämta examensdatum";
+                return null;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+        }
 
     }
 }
