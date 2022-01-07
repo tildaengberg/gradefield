@@ -860,7 +860,7 @@ namespace ProjectDB.Models
                 {
 
                     person.ExamDate = Convert.ToDateTime(reader["Pe_Examensdatum"]);
-                    person.Username = reader["Pe_Anvandarnamn"].ToString();
+                    
 
                 }
                 reader.Close();
@@ -871,6 +871,191 @@ namespace ProjectDB.Models
             {
                 errormsg = "Det går inte att hämta examensdatum";
                 return null;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+        }
+
+        public bool SetExam(out string errormsg, string user, DateTime exam)
+        {
+
+
+            SqlConnection dbConnection = new SqlConnection(GetConnection().GetSection("ConnectionStrings").GetSection("DefaultConnection").Value);
+
+            // sqlstring och lägg till en user i databasen
+            String sqlstring = "UPDATE Tbl_Person SET Pe_Examensdatum = @exam WHERE Pe_Anvandarnamn = @namn ; ";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+
+            dbCommand.Parameters.Add("exam", System.Data.SqlDbType.DateTime).Value = exam;
+            dbCommand.Parameters.Add("namn", System.Data.SqlDbType.NVarChar, 50).Value = user;
+
+            errormsg = "";
+            bool success = false;
+
+            try
+            {
+                dbConnection.Open();
+                int i = dbCommand.ExecuteNonQuery();
+                if (i == 1)
+                {
+                    success = true;
+                    return success;
+                }
+
+                else
+                {
+                    errormsg = "Det går inte att uppdatera examensdatumet";
+                    return false;
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return false;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+        }
+
+
+
+        public String GetEdu(out string errormsg, string name)
+        {
+
+
+            SqlConnection dbConnection = new SqlConnection(GetConnection().GetSection("ConnectionStrings").GetSection("DefaultConnection").Value);
+
+            // sqlstring och lägg till en user i databasen
+            String sqlstring = "SELECT Pe_Utbildning FROM Tbl_Person WHERE Pe_Anvandarnamn = @name ";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+
+            SqlDataReader reader = null;
+            dbCommand.Parameters.Add("name", System.Data.SqlDbType.NVarChar, 30).Value = name;
+
+            String edu = null;
+
+            errormsg = "";
+
+            try
+            {
+                dbConnection.Open();
+
+                reader = dbCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+
+                    edu = Convert.ToString(reader["Pe_Utbildning"]);
+
+
+                }
+                reader.Close();
+                return edu;
+
+            }
+            catch (Exception)
+            {
+                errormsg = "Det går inte att hämta examensdatum";
+                return null;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+        }
+
+
+        public bool SetEdu(out string errormsg, string user, string program)
+        {
+
+
+            SqlConnection dbConnection = new SqlConnection(GetConnection().GetSection("ConnectionStrings").GetSection("DefaultConnection").Value);
+
+            // sqlstring och lägg till en user i databasen
+            String sqlstring = "UPDATE Tbl_Person SET Pe_Utbildning = @edu WHERE Pe_Anvandarnamn = @namn ; ";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+
+            dbCommand.Parameters.Add("edu", System.Data.SqlDbType.NVarChar, 50).Value = program;
+            dbCommand.Parameters.Add("namn", System.Data.SqlDbType.NVarChar, 50).Value = user;
+
+            errormsg = "";
+            bool success = false;
+
+            try
+            {
+                dbConnection.Open();
+                int i = dbCommand.ExecuteNonQuery();
+                if (i == 1)
+                {
+                    success = true;
+                    return success;
+                }
+
+                else
+                {
+                    errormsg = "Det går inte att uppdatera utbildningen";
+                    return false;
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return false;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
+        }
+
+
+
+        public double GetHP(out string errormsg, string name)
+        {
+
+
+            SqlConnection dbConnection = new SqlConnection(GetConnection().GetSection("ConnectionStrings").GetSection("DefaultConnection").Value);
+
+            // sqlstring och lägg till en user i databasen
+            String sqlstring = "SELECT SUM(Ku_HP) AS sumHP FROM Tbl_Kurs INNER JOIN Tbl_KursPerson ON Tbl_Kurs.Ku_ID = Tbl_KursPerson.KP_Kurs INNER JOIN Tbl_Person ON Tbl_KursPerson.KP_Person = Tbl_Person.Pe_ID WHERE Pe_Anvandarnamn = @name ";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+
+            SqlDataReader reader = null;
+            dbCommand.Parameters.Add("name", System.Data.SqlDbType.NVarChar, 30).Value = name;
+
+            double sumHP = 0;
+
+            errormsg = "";
+
+            try
+            {
+                dbConnection.Open();
+
+                reader = dbCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+
+                    sumHP = Convert.ToDouble(reader["sumHP"]);
+
+
+                }
+                reader.Close();
+                return sumHP;
+
+            }
+            catch (Exception)
+            {
+                errormsg = "Det går inte att hämta HP";
+                return 0;
             }
             finally
             {

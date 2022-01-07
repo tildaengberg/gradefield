@@ -148,7 +148,7 @@ namespace ProjectDB.Controllers
 
 
         [HttpPost] //Vafan är select ?
-        public IActionResult EditCourse(int select, string status, string betyg, string del)
+        public IActionResult EditCourse(string status, string betyg, string del)
         {
             
             string s = HttpContext.Session.GetString("session");
@@ -225,9 +225,62 @@ namespace ProjectDB.Controllers
 
             Methods method = new Methods();
             Person person = method.GetExam(out string errmormsg, s);
+            person.SumHP = method.GetHP(out string errormsg2, s);
 
-            //ViewBag.date = person.ExamDate;
+            ViewBag.date = person.ExamDate.ToShortDateString();
             ViewBag.error = errmormsg;
+
+            DateTime thisDay = DateTime.Today;
+            
+            // Beräkningen (ViewData)
+            TimeSpan tot = person.ExamDate - thisDay;
+            int totalDays = tot.Days;
+            ViewData["totalDays"] = totalDays;
+
+
+            ViewBag.HP = person.SumHP;
+
+            return View(person);
+        }
+
+
+
+        [HttpGet]
+        public IActionResult Profile()
+        {
+            string s = HttpContext.Session.GetString("session");
+            ViewBag.user = s;
+
+            Person person = new Person();
+            Methods method = new Methods();
+
+
+            person = method.GetExam(out string errormsg, s);
+            person.Education = method.GetEdu(out string errormsg2, s);
+
+
+            ViewBag.exam = person.ExamDate.ToShortDateString();
+            ViewBag.education = person.Education;
+
+
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Profile(Person person)
+        {
+            string s = HttpContext.Session.GetString("session");
+
+            ViewBag.user = s;
+
+            Methods method = new Methods();
+            method.SetEdu(out string errormsg1, s, person.Education);
+            method.SetExam(out string errormsg2, s, person.ExamDate);
+
+            ViewBag.error = errormsg2;
+
+            ViewBag.exam = person.ExamDate.ToShortDateString();
+
 
             return View(person);
         }

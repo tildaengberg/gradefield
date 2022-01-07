@@ -25,6 +25,8 @@ namespace ProjectDB.Models
         [Display(Name = "Utbildning")]
         public string Education { get; set; }
 
+        public double SumHP { get; set; }
+
 
         // Alla kurser
         public List<Course> Courses = new List<Course>();
