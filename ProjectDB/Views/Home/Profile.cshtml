@@ -1,15 +1,16 @@
 @model Person
 
-@{ ViewData["Title"] = "Profile"; }
+@{ ViewData["Title"] = "Min profil"; }
 
 <partial name="navbar" />
 
 <br />
-<h2>Min profil</h2>
+<br />
+
+<h4>Min profil</h4>
 
 @ViewBag.error
 
-<br />
 <br />
 
 
@@ -21,15 +22,15 @@
                 <h4>@Html.DisplayFor(c => c.Username)</h4>
                 <br />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-          
+
                 <div class="form-group">
                     <label asp-for="ExamDate" class="control-label, span12"></label>
-                    <input asp-for="ExamDate" class="form-control" value="@Convert.ToDateTime(@ViewBag.exam).ToString("yyyy-MM-dd")"/>
+                    <input asp-for="ExamDate" class="form-control" value="@Convert.ToDateTime(@ViewBag.exam).ToString("yyyy-MM-dd")" />
                     <span asp-validation-for="ExamDate" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Education" class="control-label, span12"></label>
-                    <input asp-for="Education" class="form-control" placeholder="@ViewBag.education"/>
+                    <input asp-for="Education" class="form-control" placeholder="@ViewBag.education" />
                     <span asp-validation-for="Education" class="text-danger"></span>
                 </div>
 
@@ -38,6 +39,8 @@
                 <div class="form-group">
                     <input type="submit" value="Spara ändringar" class="btn btn-dark" />
                 </div>
+
+                <span class="text-success">@ViewBag.save</span>
 
             </form>
 

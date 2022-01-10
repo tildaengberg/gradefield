@@ -19,10 +19,12 @@ namespace ProjectDB.Models
         public string Password { get; set; }
 
         [DataType(DataType.Date)]
-        [Display(Name = "Examensdatum")]
+        [Display(Name = "Examensdatum*")]
+        [Required(ErrorMessage = "Du måste ange ett examensdatum")]
         public DateTime ExamDate { get; set; }
 
-        [Display(Name = "Utbildning")]
+        [Display(Name = "Utbildning*")]
+        [Required(ErrorMessage = "Du måste ange en utbildning")]
         public string Education { get; set; }
 
         public double SumHP { get; set; }

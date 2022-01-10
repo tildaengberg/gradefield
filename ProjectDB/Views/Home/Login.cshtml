@@ -1,13 +1,18 @@
 @model Person
 
-@{ ViewData["Title"] = "Login"; }
+@{ ViewData["Title"] = "Logga in"; }
 
 @* <h1>Login</h1> *@
 
 <div class="container-fluid">
     <div style="margin-top:0px;" class="row-fluid">
         <div class="offset4 span4 well">
+            
             <form asp-action="Login" method="post" style="margin: 10% auto; width: 400px;">
+
+                <h2 style="text-align:center">Välkommen till Taldok</h2>
+                <h5 style="text-align:center">Logga in med ditt användarnamn och lösenord</h5>
+                <br />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="Username" class="control-label, span12"></label>
@@ -18,6 +23,7 @@
                     <label asp-for="Password" class="control-label"></label>
                     <input asp-for="Password" class="form-control" type="password" />
                     <span asp-validation-for="Password" class="text-danger"></span>
+                    <span class="text-danger">@ViewBag.errormsg</span>
                 </div>
 
                 <br />
@@ -30,8 +36,6 @@
         </div>
     </div>
 </div>
-
-@ViewBag.errormsg
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

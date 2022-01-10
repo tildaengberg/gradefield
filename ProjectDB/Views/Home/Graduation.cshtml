@@ -1,19 +1,35 @@
 @model Person
 
-@{ ViewData["Title"] = "Graduation"; }
+@{ ViewData["Title"] = "Min examen"; }
 
 <partial name="navbar" />
 
 <br />
-<h2>Min examen</h2>
+<br />
 
-Examensdatum: @ViewBag.date
-@ViewBag.error <br />
+<h4>Min examen</h4>
+<br />
+<br />
+
+<div style="float:none; text-align: center">
+    <h4>Du har @ViewData["totalDays"] dagar kvar till examen.</h4>
+</div>
+
+<br />
+
+<div style="padding-left: 20%; padding-right:20%;">
+    <div style="float:left">
+        <h4><b>Examensdatum:</b><br />@ViewBag.date</h4>
+    </div>
 
 
-Dagar till examen: @ViewData["totalDays"] <br />
 
-Antal lästa HP: @ViewBag.HP <br />
+
+    <div style="float:right">
+        <h4><b>Antal lästa HP:</b><br />@ViewBag.HP</h4>
+    </div>
+
+</div>
 
 
 <br />
@@ -23,3 +39,6 @@ Antal lästa HP: @ViewBag.HP <br />
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+
+@ViewBag.error

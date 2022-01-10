@@ -22,7 +22,8 @@
                 </ul>
             </div>
 
-            <div><b>@ViewBag.user</b></div>
+            <div><b>@ViewBag.user</b></div> &emsp;
+            <a class="text-info" asp-controller="Home" asp-action="Login">Logga ut</a>
         </div>
     </nav>
 </header>
@@ -30,3 +31,4 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+

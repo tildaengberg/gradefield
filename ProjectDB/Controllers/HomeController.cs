@@ -55,8 +55,7 @@ namespace ProjectDB.Controllers
         [HttpPost]
         public IActionResult Login(Person person)
         {
-            if (ModelState.IsValid)
-            {
+            
                 Methods method = new Methods();
 
                 if (method.VerifyAccount(out string errormsg, person))
@@ -70,14 +69,7 @@ namespace ProjectDB.Controllers
 
 
 
-                return View();
-            }
-
-            else
-            {
-                return View();
-            }
-            
+                return View();        
 
         }
 
@@ -227,14 +219,14 @@ namespace ProjectDB.Controllers
             Person person = method.GetExam(out string errmormsg, s);
             person.SumHP = method.GetHP(out string errormsg2, s);
 
-            ViewBag.date = person.ExamDate.ToShortDateString();
+            ViewBag.date = person.ExamDate;
             ViewBag.error = errmormsg;
 
             DateTime thisDay = DateTime.Today;
             
             // Beräkningen (ViewData)
-            TimeSpan tot = person.ExamDate - thisDay;
-            int totalDays = tot.Days;
+            TimeSpan tot = person.ExamDate - DateTime.Now;
+            long totalDays = tot.Ticks;
             ViewData["totalDays"] = totalDays;
 
 
@@ -280,6 +272,8 @@ namespace ProjectDB.Controllers
             ViewBag.error = errormsg2;
 
             ViewBag.exam = person.ExamDate.ToShortDateString();
+
+            ViewBag.save = "Dina ändringar är sparade";
 
 
             return View(person);
