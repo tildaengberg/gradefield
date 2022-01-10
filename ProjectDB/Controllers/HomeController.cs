@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using System.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using System.Globalization;
 
 namespace ProjectDB.Controllers
 {
@@ -208,45 +209,42 @@ namespace ProjectDB.Controllers
 
 
 
-        // Fortsätt här, getexam returnerar null :(
         [HttpGet]
         public IActionResult Graduation()
         {
             string s = HttpContext.Session.GetString("session");
             ViewBag.user = s;
-
             Methods method = new Methods();
             Person person = method.GetExam(out string errmormsg, s);
             person.SumHP = method.GetHP(out string errormsg2, s);
 
-            ViewBag.date = person.ExamDate;
+
+            // År
+            ViewData["totYear"] = person.ExamDate.Year - DateTime.Now.Year;
+
+            //Månad
+            ViewData["totMonth"] = person.ExamDate.Month - DateTime.Now.Month;
+
+            // Dagar
+            if ((person.ExamDate.Day - DateTime.Now.Day) < 0){
+
+                ViewData["totDay"] = DateTime.Now.Day - person.ExamDate.Day;
+            }
+            else
+            {
+                ViewData["totDay"] = person.ExamDate.Day - DateTime.Now.Day;
+            }
+
+            // Totalt antal dagar kvar
+            DateTime thisDay = DateTime.Today;
+            TimeSpan tot = person.ExamDate - thisDay;
+            ViewData["totalDays"] = tot.Days;
+
+            // Examensdatum
+            ViewBag.date = person.ExamDate.ToString("dd MMMM, yyyy", CultureInfo.GetCultureInfo("sv-SE"));
             ViewBag.error = errmormsg;
 
-
-            int yearNow = DateTime.Now.Year;
-            int monthNow = DateTime.Now.Month;
-            int dayNow = DateTime.Now.Day;
-
-            int yearInput = person.ExamDate.Year;
-            int monthInput = person.ExamDate.Month;
-            int dayInput = person.ExamDate.Day;
-
-            int totYear = yearInput - yearNow;
-            int totMonth = monthInput - monthNow;
-            int totDay = dayInput - dayNow;
-
-            ViewData["totYear"] = totYear;
-            ViewData["totMonth"] = totMonth;
-            ViewData["totDay"] = totDay;
-
-            DateTime thisDay = DateTime.Today;
-
-            // Beräkningen (ViewData)
-            TimeSpan tot = person.ExamDate - thisDay;
-            int totalDays = tot.Days;
-            ViewData["totalDays"] = totalDays;
-
-
+            // Summa HP
             ViewBag.HP = person.SumHP;
 
             return View(person);
