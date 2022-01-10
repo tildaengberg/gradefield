@@ -340,7 +340,10 @@ namespace ProjectDB.Controllers
 
             Byte[] bytes = method.Upload(out string errormsg, person, s);
 
-            ViewBag.Image = ViewImage(bytes);
+            
+            var stream = new MemoryStream(bytes);
+            IFormFile img = new FormFile(stream, 0, bytes.Length, "name", "fileName");
+            person.File = img;
 
             ViewBag.errormsg = errormsg;
 
