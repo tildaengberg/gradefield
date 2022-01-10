@@ -2,6 +2,7 @@
 
 @{ ViewData["Title"] = "Min examen"; }
 
+
 <partial name="navbar" />
 
 <br />
@@ -11,22 +12,25 @@
 <br />
 <br />
 
-<div style="float:none; text-align: center">
-    <h4>Du har @ViewData["totalDays"] dagar kvar till examen.</h4>
+<div style="text-align: center">
+
+    <h2 class="year"> Du har @ViewData["totYear"] år, @ViewData["totMonth"] månader och @ViewData["totDay"] dagar kvar tills examen!</h2>
+    <br/>
+    <h4>Du har @ViewData["totalDays"] dagar totalt kvar till examen.</h4>
+
 </div>
 
+<br />
 <br />
 
 <div style="padding-left: 20%; padding-right:20%;">
     <div style="float:left">
-        <h4><b>Examensdatum:</b><br />@ViewBag.date</h4>
+        <h5><b>Examensdatum:</b><br />@ViewBag.date</h5>
+        
     </div>
 
-
-
-
     <div style="float:right">
-        <h4><b>Antal lästa HP:</b><br />@ViewBag.HP</h4>
+        <h5><b>Antal lästa HP:</b><br />@ViewBag.HP</h5>
     </div>
 
 </div>

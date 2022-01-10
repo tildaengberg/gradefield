@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
 namespace ProjectDB.Models
 {
@@ -28,6 +29,10 @@ namespace ProjectDB.Models
         public string Education { get; set; }
 
         public double SumHP { get; set; }
+
+        [Display(Name = "Ladda upp bild (.png)")]
+        [Required(ErrorMessage = "Du måste ladda upp en bild")]
+        public IFormFile File { get; set; }
 
 
         // Alla kurser

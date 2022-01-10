@@ -1063,5 +1063,44 @@ namespace ProjectDB.Models
             }
         }
 
+
+        // -------- BILDUPPLADDNING --------
+        public Byte[] Upload(out string errormsg, Person img, string user)
+        {
+            try
+            {
+                Byte[] bytes = null;
+                if (img.File != null)
+                {
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        img.File.OpenReadStream().CopyTo(ms);
+                        bytes = ms.ToArray();
+                    }
+
+                    string connectionstring = GetConnection().GetSection("ConnectionStrings").GetSection("DefaultConnection").Value;
+                    SqlConnection con = new SqlConnection(connectionstring);
+
+
+                    SqlCommand cmd = new SqlCommand("Insert into Tbl_Person(Pe_Profilbild) values ( @Filepic ) WHERE Pe_Anvandarnamn= @user ", con);
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Parameters.AddWithValue("Filepic", bytes);
+                    cmd.Parameters.AddWithValue("user", user);
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+
+                    errormsg = "";
+                    return bytes;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            errormsg = "";
+            return null;
+        }
+
     }
 }

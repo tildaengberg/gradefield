@@ -222,11 +222,28 @@ namespace ProjectDB.Controllers
             ViewBag.date = person.ExamDate;
             ViewBag.error = errmormsg;
 
+
+            int yearNow = DateTime.Now.Year;
+            int monthNow = DateTime.Now.Month;
+            int dayNow = DateTime.Now.Day;
+
+            int yearInput = person.ExamDate.Year;
+            int monthInput = person.ExamDate.Month;
+            int dayInput = person.ExamDate.Day;
+
+            int totYear = yearInput - yearNow;
+            int totMonth = monthInput - monthNow;
+            int totDay = dayInput - dayNow;
+
+            ViewData["totYear"] = totYear;
+            ViewData["totMonth"] = totMonth;
+            ViewData["totDay"] = totDay;
+
             DateTime thisDay = DateTime.Today;
-            
+
             // Beräkningen (ViewData)
-            TimeSpan tot = person.ExamDate - DateTime.Now;
-            long totalDays = tot.Ticks;
+            TimeSpan tot = person.ExamDate - thisDay;
+            int totalDays = tot.Days;
             ViewData["totalDays"] = totalDays;
 
 
@@ -240,6 +257,8 @@ namespace ProjectDB.Controllers
         [HttpGet]
         public IActionResult Profile()
         {
+            ViewBag.Image = null;
+
             string s = HttpContext.Session.GetString("session");
             ViewBag.user = s;
 
@@ -274,12 +293,27 @@ namespace ProjectDB.Controllers
             ViewBag.exam = person.ExamDate.ToShortDateString();
 
             ViewBag.save = "Dina ändringar är sparade";
+ 
+            // BILDUPPLADDNING
+            
+            Byte[] bytes = method.Upload(out string errormsg, person, s);
+
+            ViewBag.Image = ViewImage(bytes);
+
+            ViewBag.errormsg = errormsg;
+            
 
 
             return View(person);
         }
 
 
+        [NonAction]
+        private string ViewImage(byte[] arrayImage)
+        {
+            string base64String = Convert.ToBase64String(arrayImage, 0, arrayImage.Length);
+            return "data:image/png;base64," + base64String;
+        }
 
 
 

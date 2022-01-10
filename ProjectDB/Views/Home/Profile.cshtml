@@ -10,6 +10,7 @@
 <h4>Min profil</h4>
 
 @ViewBag.error
+@ViewBag.errormsg
 
 <br />
 
@@ -43,6 +44,37 @@
                 <span class="text-success">@ViewBag.save</span>
 
             </form>
+
+
+            <p>Ladda upp en valfri bild. OBS! Endast formatet .png stödjs.</p>
+            <hr />
+
+            <div class=" =row">
+                <div class="col-md-4">
+                    <form asp-action="Profile" method="post" enctype="multipart/form-data">
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="File" class="control-label"></label>
+                            <input type="file" id="formFile" name="File" class="form-control" />
+                            <span asp-validation-for="File" class="text-danger"></span>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <input type="submit" value="Ladda upp" class="btn btn-dark" />
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+            @if (!string.IsNullOrEmpty(@ViewBag.Image))
+            {
+<p>Uppladdad bild:</p>
+
+                <img src="@ViewBag.Image" style="width: 400px; " alt="bild" />}
 
         </div>
     </div>
