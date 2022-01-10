@@ -257,12 +257,15 @@ namespace ProjectDB.Controllers
         [HttpGet]
         public IActionResult Profile()
         {
-            ViewBag.Image = null;
+
+            Person person = new Person();
 
             string s = HttpContext.Session.GetString("session");
             ViewBag.user = s;
 
-            Person person = new Person();
+                
+
+            
             Methods method = new Methods();
 
 
@@ -272,6 +275,12 @@ namespace ProjectDB.Controllers
 
             ViewBag.exam = person.ExamDate.ToShortDateString();
             ViewBag.education = person.Education;
+
+            ViewBag.Image = null;
+
+            Byte[] bytes = method.GetImg(out string errormsg3, s);
+
+                ViewBag.Image = ViewImage(bytes);
 
 
             return View();
@@ -311,6 +320,7 @@ namespace ProjectDB.Controllers
         [NonAction]
         private string ViewImage(byte[] arrayImage)
         {
+            
             string base64String = Convert.ToBase64String(arrayImage, 0, arrayImage.Length);
             return "data:image/png;base64," + base64String;
         }

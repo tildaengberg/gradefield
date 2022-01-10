@@ -1082,7 +1082,7 @@ namespace ProjectDB.Models
                     SqlConnection con = new SqlConnection(connectionstring);
 
 
-                    SqlCommand cmd = new SqlCommand("Insert into Tbl_Person(Pe_Profilbild) values ( @Filepic ) WHERE Pe_Anvandarnamn= @user ", con);
+                    SqlCommand cmd = new SqlCommand("UPDATE Tbl_Person SET Pe_Profilbild = @Filepic WHERE Pe_Anvandarnamn = @user ", con);
                     cmd.CommandType = CommandType.Text;
                     cmd.Parameters.AddWithValue("Filepic", bytes);
                     cmd.Parameters.AddWithValue("user", user);
@@ -1100,6 +1100,53 @@ namespace ProjectDB.Models
             }
             errormsg = "";
             return null;
+        }
+
+
+
+
+
+        public Byte[] GetImg(out string errormsg, string user)
+        {
+            SqlConnection dbConnection = new SqlConnection(GetConnection().GetSection("ConnectionStrings").GetSection("DefaultConnection").Value);
+
+            // sqlstring och lägg till en user i databasen
+            String sqlstring = "SELECT Pe_Profilbild FROM Tbl_Person WHERE Pe_Anvandarnamn = @name ";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+
+            SqlDataReader reader = null;
+            dbCommand.Parameters.Add("name", System.Data.SqlDbType.NVarChar, 30).Value = user;
+
+            Byte[] bytes = null;
+
+            errormsg = "";
+
+            try
+            {
+                dbConnection.Open();
+
+                reader = dbCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+
+                    bytes = (byte[])(reader["Pe_Profilbild"]);
+
+
+                }
+                reader.Close();
+                return bytes;
+
+            }
+            catch (Exception)
+            {
+                errormsg = "Det går inte att hämta HP";
+                return null;
+            }
+            finally
+            {
+                dbConnection.Close();
+            }
         }
 
     }
