@@ -277,10 +277,13 @@ namespace ProjectDB.Controllers
             ViewBag.education = person.Education;
 
             ViewBag.Image = null;
+            if (method.GetImg(out string errormsg3, s) != null)
+            {
 
-            Byte[] bytes = method.GetImg(out string errormsg3, s);
+                Byte[] bytes = method.GetImg(out string errormsg4, s);
 
                 ViewBag.Image = ViewImage(bytes);
+            }
 
 
             return View();
@@ -302,19 +305,50 @@ namespace ProjectDB.Controllers
             ViewBag.exam = person.ExamDate.ToShortDateString();
 
             ViewBag.save = "Dina ändringar är sparade";
- 
+
+            ViewBag.Image = null;
+            if (method.GetImg(out string errormsg3, s) != null)
+            {
+
+                Byte[] bytes = method.GetImg(out string errormsg4, s);
+
+                ViewBag.Image = ViewImage(bytes);
+            }
+
+
+            return View(person);
+        }
+
+        [HttpGet]
+        public IActionResult EditImage()
+        {
+            string s = HttpContext.Session.GetString("session");
+            ViewBag.user = s;
+
+
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult EditImage(Person person)
+        {
+            string s = HttpContext.Session.GetString("session");
+            ViewBag.user = s;
+
             // BILDUPPLADDNING
-            
+            Methods method = new Methods();
+
             Byte[] bytes = method.Upload(out string errormsg, person, s);
 
             ViewBag.Image = ViewImage(bytes);
 
             ViewBag.errormsg = errormsg;
-            
 
-
-            return View(person);
+            return RedirectToAction("Profile");
         }
+
+
+
 
 
         [NonAction]
