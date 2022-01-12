@@ -29,6 +29,11 @@ namespace ProjectDB.Controllers
             return View();
         }
 
+        public IActionResult Grade()
+        {
+            return View();
+        }
+
         public IActionResult Overview()
         {
             string s = HttpContext.Session.GetString("session");
