@@ -46,6 +46,7 @@ namespace ProjectDB
                 app.UseExceptionHandler("/Home/Error");
             }
 
+
             app.UseSession();
             app.UseHttpsRedirection();
             app.UseStaticFiles();

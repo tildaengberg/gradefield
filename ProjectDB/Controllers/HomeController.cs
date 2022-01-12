@@ -29,8 +29,13 @@ namespace ProjectDB.Controllers
             return View();
         }
 
+        [HttpGet]
         public IActionResult Grade()
         {
+            Person person = new Person();
+
+            string s = HttpContext.Session.GetString("session");
+            ViewBag.user = s;
             return View();
         }
 
