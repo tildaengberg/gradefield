@@ -223,6 +223,10 @@ namespace ProjectDB.Controllers
             Person person = method.GetExam(out string errmormsg, s);
             person.SumHP = method.GetHP(out string errormsg2, s);
 
+            int totalYear = DateTime.Now.Year;
+            int totalMonth = DateTime.Now.Month;
+            int monthsInDay = DateTime.DaysInMonth(totalYear, totalMonth);
+
 
             // År
             ViewData["totYear"] = person.ExamDate.Year - DateTime.Now.Year;
@@ -233,7 +237,9 @@ namespace ProjectDB.Controllers
             // Dagar
             if ((person.ExamDate.Day - DateTime.Now.Day) < 0){
 
-                ViewData["totDay"] = DateTime.Now.Day - person.ExamDate.Day;
+                
+
+                ViewData["totDay"] = monthsInDay - DateTime.Now.Day + person.ExamDate.Day;
             }
             else
             {

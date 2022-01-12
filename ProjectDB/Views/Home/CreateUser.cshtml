@@ -5,7 +5,8 @@
 <div class="container-fluid">
     <div style="margin-top:0px;" class="row-fluid">
         <div class="offset4 span4 well">
-            <form asp-action="CreateUser" method="post" style="margin: 10% auto; width: 400px;">
+            <form asp-action="CreateUser" method="post" style="margin:auto; width: 400px;">
+                <img src="@Url.Content("~/images/logo.png")" style="width: 250px; height: 250px; margin-left: 75px; margin-right: 75px; " />
                 <h4>Skapa en ny användare</h4>
                 <br />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -35,8 +36,8 @@
                 <div class="form-group">
                     <input type="submit" value="Skapa användare" class="btn btn-dark" />
                 </div>
-
-                <a asp-controller="Home" asp-action="Login">Logga in</a>
+                <br />
+                <a asp-controller="Home" asp-action="Login" class="btn btn-dark">Tillbaka</a>
             </form>
 
         </div>

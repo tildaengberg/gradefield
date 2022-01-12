@@ -27,6 +27,8 @@
             @Html.DisplayFor(c => c.Institution)
             <br />
             <br />
+
+
             <form asp-action="EditCourse" method="post" style="margin: 0% auto; width: 400px;">
                 <b><label asp-for="Status" class="control-label, span12"></label></b>
                 <br />
@@ -34,26 +36,26 @@
                 @{ if (Model.Status != "Avklarad")
                     {
 
+                        <div class="form-group">
 
-            <div class="form-group">
-
-                <select class="form-control" id="status" name="status">
+                        <select class="form-control" id="status" name="status">
 
                     @foreach (ProjectDB.Models.Status statuses in Model.AllStatuses)
                     {
-            @if (statuses.Id != i)
-            {
-            <option value=" @statuses.Id ">@statuses.StatusType</option>
- }
-        else
-        {
-            <option value="@statuses.Id" Selected>@statuses.StatusType</option>
-}}
-                </select>
-            </div> }
-        else
-        {
-            @Html.DisplayFor(c => c.Status) } }
+                        @if (statuses.Id != i)
+                        {
+                            <option value=" @statuses.Id ">@statuses.StatusType</option>
+                        }
+                        else
+                        {
+                            <option value="@statuses.Id" Selected>@statuses.StatusType</option>
+                        }
+                    }
+                        </select>
+                        </div>
+                    }
+                else{
+                    @Html.DisplayFor(c => c.Status) } }
 
 
                 @{ if (Model.Betyg == "NAN" || Model.Betyg == "U")
@@ -83,8 +85,13 @@
 
                         else
                         {
-
-            @Html.DisplayFor(c => c.Betyg) }
+            <br />
+            <br />
+            <h6><b>Betyg</b></h6>
+            @Html.DisplayFor(c => c.Betyg)
+            <br />
+            <br />
+                    }
 
 
 

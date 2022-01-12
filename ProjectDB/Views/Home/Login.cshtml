@@ -8,9 +8,10 @@
     <div style="margin-top:0px;" class="row-fluid">
         <div class="offset4 span4 well">
             
-            <form asp-action="Login" method="post" style="margin: 10% auto; width: 400px;">
+            <form asp-action="Login" method="post" style="margin:auto; width: 400px;">
+                <img src="@Url.Content("~/images/logo.png")" style="width: 250px; height: 250px; margin-left: 75px; margin-right: 75px; " />
 
-                <h2 style="text-align:center">Välkommen till Taldok</h2>
+                <h2 style="text-align:center">Välkommen till GradeField</h2>
                 <h5 style="text-align:center">Logga in med ditt användarnamn och lösenord</h5>
                 <br />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -40,3 +41,5 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+
