@@ -1,0 +1,5 @@
+# GradeField
+In the course "Database technology and web-based systems." has our group developed a web application in ASP.NET MVC with full CRUD functionality and adherence to WCAG and WAI guidelines. The application allows users to manage their courses, grades, and other educational information. The system is built on a database with five tables - Person, Kurs, Institution, Status, and Betyg. The relationship between Kurs and Person is a many-to-many relationship, which requires a junction table called KursPerson to handle attributes such as status and grade. The flow of the application is described in a flowchart, which includes views such as login, overview, my degree, my courses, and my profile. The application also includes features such as statistics, course management, and profile editing.
+
+## Project Setup
+This project uses Docker, Azure Data Studio och Visual Studio. To be able to run the code a database has to be setted up with the same structure as described with five tables unfortunately. 
